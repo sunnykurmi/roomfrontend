@@ -24,6 +24,7 @@ function Usercreate() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        navigate("/user");
          dispatch(createRoom(formData));
         // You can add your logic here to handle form submission
         console.log(formData);
