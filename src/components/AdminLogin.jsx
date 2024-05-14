@@ -150,7 +150,7 @@ function Login() {
             <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
               <a
                 className="uppercase font-medium text-slate-100 hover-underline-animation false"
-                href="/login"
+                href="/"
               >
                 Login/Register
               </a>
@@ -214,7 +214,7 @@ function Login() {
               <div className="flex flex-wrap justify-center my-3 w-full mt-12">
                 <a
                   className="inline-block align-baseline font-medium text-md text-brand hover:text-blue-800 text-right"
-                  href="/signup"
+                  href="/admin/signup"
                 >
                   Create an account
                 </a>
