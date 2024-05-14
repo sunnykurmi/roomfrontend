@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import { RiCloseLine } from "@remixicon/react";
-import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { asyncsignin } from "../store/Actions/userActions";
+import { Link, useNavigate } from "react-router-dom";
+import { asyncsignup } from "../store/Actions/adminActions";
 import Footer from "./Footer";
 
-function Login() {
+function Signup() {
   const navigate = useNavigate();
-  const { isAuth, error } = useSelector((state) => state.user);
+  const { isAuth, error } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
+  const [formValid, setFormValid] = useState(false);
 
-  const [studentFormData, setStudentFormData] = useState({
-    studentemail: "",
-    studentpassword: "",
+
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    contact: "",
+    password: "",
   });
 
-  const handleStudentChange = (e) => {
-    setStudentFormData({ ...studentFormData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  //(studentFormData);
-  const signinStudent = async (event) => {
+  const signupuser = async (event) => {
     event.preventDefault();
-    dispatch(asyncsignin(studentFormData));
+    dispatch(asyncsignup(formData));
   };
 
   useEffect(() => {
@@ -36,6 +33,12 @@ function Login() {
       navigate("/user");
     }
   }, [isAuth, navigate]);
+  useEffect(() => {
+    const isFormValid = Object.values(formData).every(
+      (value) => value.trim() !== ""
+    );
+    setFormValid(isFormValid);
+  }, [formData]);
   return (
     <div>
       <div className="relative flex bg-[#004AAD] flex-wrap justify-between items-center px-4 md:px-12 global-navbar__container bg-brand brand-divider-bottom shadow-md">
@@ -76,9 +79,9 @@ function Login() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/signup"
+              href="/admin/login"
             >
-              Register
+              Login
             </a>
           </li>
         </ul>
@@ -150,83 +153,94 @@ function Login() {
             <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
               <a
                 className="uppercase font-medium text-slate-100 hover-underline-animation false"
-                href="/login"
+                href="/admin/login"
               >
-                Login/Register
+                Login
               </a>
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="login__form">
+      <div className="register__form">
         <div className="container mx-auto p-4 flex justify-center min-h-[600px] items-center">
-          <form className="w-full max-w-lg p-4 md:p-10 shadow-md">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-extrabold text-blue-900">
-                Welcome Back
-              </h2>
-              <p className="text-gray-500">
-                Log in to continue to your account
-              </p>
-            </div>
-            <div className="mb-6">
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={studentFormData.email}
-                onChange={handleStudentChange}
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-         
-              ></input>
-            </div>
-            <div className="mb-6">
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={studentFormData.password}
-                onChange={handleStudentChange}
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-            
-              ></input>
-            </div>
-            <div className="items-center">
-              <div>
-                <button
-                  type="submit"
-                  onClick={signinStudent}
-                  className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-                >
-                  Log In
-                </button>
+          <form action="#">
+            <div className="w-full max-w-lg p-4 shadow-md md:p-10">
+              <div className="mb-10 text-center">
+                <h2 className="text-3xl font-extrabold text-blue-900">
+                  Join the Adventure!
+                </h2>
+                <p className="text-gray-500">
+                  Create your account and start your journey with us
+                </p>
               </div>
-              <br />
-              <div className="relative">
-                <div className="absolute left-0 right-0 flex justify-center items-center">
-                  <div className="border-t w-full absolute"></div>
-                  <span className="bg-white px-3 text-gray-500 z-10">
-                    New to Varshneys?
-                  </span>
+              <div className="flex flex-wrap mb-6 -mx-3">
+                <div className="w-full px-3 mb-6 md:w-1/2 md:mb-0 relative">
+                  <input
+                    name="firstname"
+                    placeholder="First Name"
+                    value={formData.firstname}
+                    onChange={handleChange}
+                    className="border block w-full px-4 py-3 mb leading-tight text-gray-700 bg-gray-200 rounded appearance-none focus:outline-none focus:bg-white"
+                  ></input>
+                </div>
+                <div className="w-full px-3 md:w-1/2">
+                  <input
+                    name="lastname"
+                    placeholder="Last Name"
+                    value={formData.lastname}
+                    onChange={handleChange}
+                    className="border block w-full px-4 py-3 mb leading-tight text-gray-700 bg-gray-200 rounded appearance-none focus:outline-none focus:bg-white"
+                  ></input>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-center my-3 w-full mt-12">
-                <a
-                  className="inline-block align-baseline font-medium text-md text-brand hover:text-blue-800 text-right"
-                  href="/signup"
-                >
-                  Create an account
-                </a>
+              <div className="mb-6">
+                <input
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="border block w-full px-4 py-3 mb leading-tight text-gray-700 bg-gray-200 rounded appearance-none focus:outline-none focus:bg-white"
+                ></input>
               </div>
+              <div className="mb-6">
+                <input
+                  name="contact"
+                  placeholder="Phone"
+                  value={formData.contact}
+                  onChange={handleChange}
+                  className="border block w-full px-4 py-3 mb leading-tight text-gray-700 bg-gray-200 rounded appearance-none focus:outline-none focus:bg-white"
+                ></input>
+              </div>
+              <div className="mb-6">
+                <input
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="border block w-full px-4 py-3 mb leading-tight text-gray-700 bg-gray-200 rounded appearance-none focus:outline-none focus:bg-white"
+                ></input>
+              </div>
+              
+              <div className="flex items-center w-full my-3">
+                <button
+                  type="submit"
+                  onClick={signupuser}
+                  disabled={!formValid}
+                  className="w-full  px-4 py-2 font-bold text-white rounded bg-blue-900 hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                >
+                  Register
+                </button>
+              </div>
+              <a
+                className="inline-block w-full text-lg text-center text-gray-500 align-baseline hover:text-blue-800"
+                href="/login"
+              >
+                Back to login
+              </a>
             </div>
           </form>
         </div>
-      </div>
-      <div className="bg-slate-50 flex flex-col mx-auto w-full max-w-lg px-4">
-        <small className="text-slate-600">test user details</small>
-        <small className="text-slate-600">Email: user1@example.com</small>
-        <small className="text-slate-600">Password: password1</small>
       </div>
 <Footer />
 
@@ -234,4 +248,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

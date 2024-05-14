@@ -61,7 +61,15 @@ function Home() {
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
               href="/login"
             >
-              Login/Register
+              User Login
+            </a>
+          </li>
+          <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
+            <a
+              className="uppercase font-medium text-slate-100 hover-underline-animation false"
+              href="/admin/login"
+            >
+              Admin Login
             </a>
           </li>
         </ul>
@@ -135,7 +143,15 @@ function Home() {
                 className="uppercase font-medium text-slate-100 hover-underline-animation false"
                 href="/login"
               >
-                Login/Register
+                User Login
+              </a>
+            </li>
+            <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
+              <a
+                className="uppercase font-medium text-slate-100 hover-underline-animation false"
+                href="/login"
+              >
+                Admin Login
               </a>
             </li>
           </ul>

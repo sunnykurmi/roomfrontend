@@ -1,24 +1,21 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { asynccurrentUser } from "../store/Actions/userActions";
+import { asynccurrentAdmin } from "../store/Actions/adminActions";
 import Footer from "./Footer";
 
-
-function Userbookings() {
+function Userprofile() {
   const dispatch = useDispatch(); // Get dispatch function
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.admin);
   console.log(user);
 
   useEffect(() => {
-    dispatch(asynccurrentUser()); // Fetch employee data when component mounts
+    dispatch(asynccurrentAdmin()); // Fetch employee data when component mounts
     // dispatch(CreateInternship());
   }, [dispatch]);
+  
 
-  if(!user) return null;
-  const allbookings = user.roomsbooked;
-  console.log(allbookings);
   return (
     <div>
       <div className="relative flex bg-[#004AAD] flex-wrap justify-between items-center px-4 md:px-12 global-navbar__container bg-brand brand-divider-bottom shadow-md">
@@ -35,7 +32,7 @@ function Userbookings() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation active-link"
-              href="/user"
+              href="/admin"
             >
               Home
             </a>
@@ -46,15 +43,15 @@ function Userbookings() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/user/bookings"
+              href="/admin/create"
             >
-              Bookings
+              Create
             </a>
           </li>
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/user/profile"
+              href="/admin/profile"
             >
               Profile
             </a>
@@ -68,7 +65,23 @@ function Userbookings() {
             </a>
           </li>
         </ul>
-
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="bars"
+          className="svg-inline--fa fa-bars fa-2x block md:hidden"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+          data-testid="menu-toggle__button"
+          color="#fff"
+        >
+          <path
+            fill="currentColor"
+            d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"
+          ></path>
+        </svg>
         <div
           data-testid="hamburger-menu"
           className="bg-brand shadow-2xl z-20 hidden"
@@ -128,84 +141,61 @@ function Userbookings() {
           </ul>
         </div>
       </div>
-    {allbookings.map((booking) => (
-      <div key={booking} className="px-6 border-2 py-10 sm:px-32">
-        <div className="flex items-center justify-between">
-          <p className="text-xl font-bold text-brand truncate">
-            {booking.room.name}
-          </p>
-          <div className="ml-2 flex-shrink-0 flex">
-            <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-              Booking ID: {booking._id}
+      <div className="px-32 py-16 w-full">
+        <div className="bg-white shadow sm:rounded-lg flex flex-col">
+          <div className="px-4 py-5 sm:px-6">
+            <h3 className="text-xl leading-6 font-medium text-gray-900">
+              Personal details
+            </h3>
+            <p className="mt-1 max-w-2xl text-gray-500">
+              Keep your details current to ensure seamless communication and
+              services
             </p>
           </div>
-        </div>
-        <div className="mt-2 sm:flex sm:justify-between">
-          <div className="sm:flex gap-x-2">
-            <p className="flex items-center text-sm text-gray-500">
-              <svg
-                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 7V3m8 4V3m-4 4V3m0 4v8m-4-4h8"
-                ></path>
-              </svg>
-              Booking Date: {new Date(booking.createdAt).toLocaleDateString()}
-     
-            </p>
-            <p className="flex items-center text-sm text-gray-500">
-              <svg
-                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M7 10l5 5 5-5m-5 5V3"
-                ></path>
-              </svg>
-              Check-in: {new Date(booking.checkin).toLocaleDateString()}
-            </p>
-            <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-              <svg
-                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M7 10l5 5 5-5m-5 5V3"
-                ></path>
-              </svg>
-              Check-out: {new Date(booking.checkout).toLocaleDateString()}
-
-            </p>
+          <div className="border-t border-gray-200">
+            <dl>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
+                <dt className="font-medium text-gray-500">Firstname</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
+                  {user?.firstname}
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
+                <dt className="font-medium text-gray-500">Lastname</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
+                  {user?.lastname}
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
+                <dt className="font-medium text-gray-500">Email address</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
+                  {user?.email}
+                  <span className="text-green-500 font-medium"> Verified</span>
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
+                <dt className="font-medium text-gray-500">Phone number</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
+                  {user?.contact}
+                  <span className="text-green-500 font-medium"> Verified</span>
+                </dd>
+              </div>
+              
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
+                <dt className="font-medium text-gray-500">Nationality</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
+                  India{" "}
+                </dd>
+              </div>
+            </dl>
           </div>
-          <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-            <p className="flex items-center">
-              <span className="font-medium">Total Fare: </span>{" "}
-              <span className="ml-2">₹{booking.room.price}</span>
-            </p>
-          </div>
+          
         </div>
       </div>
-    ))}
-<Footer />
+<Footer/>
 
     </div>
   );
 }
 
-export default Userbookings;
+export default Userprofile;

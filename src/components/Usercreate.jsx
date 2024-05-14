@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { asynccurrentUser } from "../store/Actions/userActions";
-import { createRoom } from "../store/Actions/userActions";
+import { asynccurrentAdmin } from "../store/Actions/adminActions";
+import { createRoom } from "../store/Actions/adminActions";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { RiArrowLeftLine } from "@remixicon/react";
@@ -10,7 +10,7 @@ import Footer from "./Footer";
 function Usercreate() {
   const dispatch = useDispatch(); // Get dispatch function
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.admin);
   console.log(user);
 
     const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ function Usercreate() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate("/user");
+        navigate("/admin");
          dispatch(createRoom(formData));
         // You can add your logic here to handle form submission
         console.log(formData);
@@ -32,7 +32,7 @@ function Usercreate() {
 
     
   useEffect(() => {
-    dispatch(asynccurrentUser()); // Fetch employee data when component mounts
+    dispatch(asynccurrentAdmin()); // Fetch employee data when component mounts
     // dispatch(CreateInternship());
   }, [dispatch]);
 
@@ -64,7 +64,7 @@ function Usercreate() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation active-link"
-              href="/user"
+              href="/admin"
             >
               Home
             </a>
@@ -72,23 +72,16 @@ function Usercreate() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation active-link"
-              href="/user/create"
+              href="/admin/create"
             >
               Create
             </a>
           </li>
+          
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/user/bookings"
-            >
-              Bookings
-            </a>
-          </li>
-          <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
-            <a
-              className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/user/profile"
+              href="/admin/profile"
             >
               Profile
             </a>

@@ -40,22 +40,45 @@ function Bookhotel() {
   const { user } = useSelector((state) => state.user);
   console.log(room);
 
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const month = `0${d.getMonth() + 1}`.slice(-2);
+    const day = `0${d.getDate()}`.slice(-2);
+    const year = d.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+  
+  const todayDate = formatDate(new Date());
+
+
   const [formData, setFormData] = useState({
-    checkin: "",
-    checkout: "",
+    checkin: formatDate(new Date()),
+   checkout: "",
     rooms: "",
     guests: "",
     id: id,
+    nameoncard: '',
+    cardnumber: '',
+    expiry: '',
+    cvc: '',
+    address: '',
+    city: '',
+    state: '',
+    postalcode: '',
   });
+  const [load, setLoad] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/user");
-    dispatch(bookRoom(formData,id));
-    // You can add your logic here to handle form submission
-    console.log(formData);
+    setLoad(true);
+    const serializedFormData = encodeURIComponent(JSON.stringify(formData));
+    dispatch(bookRoom(formData, id));
+    setTimeout(() => {
+      navigate(`/confirm/${serializedFormData}/${room.id}`);
+    }, 3000);
   };
-
+  
   useEffect(() => {
     dispatch(asynccurrentUser()); // Fetch employee data when component mounts
     // dispatch(CreateInternship());
@@ -73,8 +96,11 @@ function Bookhotel() {
     );
     setFormValid(isFormValid);
   }, [formData]);
+
+  console.log(formData);
   return (
     <div>
+      
       <div className="relative flex bg-[#004AAD] flex-wrap justify-between items-center px-4 md:px-12 global-navbar__container bg-brand brand-divider-bottom shadow-md">
         <div className="flex ">
           <a href="/">
@@ -94,14 +120,7 @@ function Bookhotel() {
               Home
             </a>
           </li>
-          <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
-            <a
-              className="uppercase font-medium text-slate-100 hover-underline-animation active-link"
-              href="/user/create"
-            >
-              Create
-            </a>
-          </li>
+          <li className="p-4 hover:bg-blue-900 md:hover:bg-brand"></li>
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
@@ -203,8 +222,10 @@ function Bookhotel() {
           </ul>
         </div>
       </div>
+      
       {room && (
         <div className="">
+          
           <div className="w-full h-[90vh] px-32 py-20 flex gap-2 ">
             <div className="w-[70%] py-5">
               <img
@@ -229,59 +250,285 @@ function Bookhotel() {
                     Free cancellation 1 day prior to stay
                   </div>
                 </div>
-                <form className="pl-8" action="">
-                  <div className="text-lg font-semibold text-gray-800 mb-1">
-                    checkin
+                <form className="pl-8 pr-8" action="">
+                  
+                  
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                   
+                    >
+                      check-in
+                    </label>
+                    <input
+                      className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="rooms"
+                      type="date"
+                      defaultValue={Date.now()}
+                      value={formData.checkin}
+                      onChange={handleChange}
+                      name="checkin"
+                      placeholder=""
+                      required=""
+                      aria-invalid="false"
+            
+                    />
                   </div>
-                  <input
-                    className="border-2 "
-                    type="date"
-                    value={formData.checkin}
-                    onChange={handleChange}
-                    name="checkin"
-                    id=""
-                  />
-                  <div className="text-lg  font-semibold text-gray-800 mb-1">
-                    checkout
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+               
+                    >
+                      check-out
+                    </label>
+                    <input
+                      className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="rooms"
+                      type="date"
+                      value={formData.checkout}
+                      onChange={handleChange}
+                      min={todayDate}
+                      name="checkout"
+                      placeholder=""
+                      required=""
+                      aria-invalid="false"
+            
+                    />
                   </div>
-                  <input
-                    className="border-2 "
-                    type="date"
-                    value={formData.checkout}
-                    onChange={handleChange}
-                    name="checkout"
-                    id=""
-                  />
-                  <div className="text-lg  font-semibold text-gray-800 mb-1">
-                    No. of Rooms
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+               
+                    >
+                      No. of rooms
+                    </label>
+                    <input
+                      className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="rooms"
+                      type="number"
+                      value={formData.rooms}
+                      onChange={handleChange}
+                      name="rooms"
+                      placeholder="Enter no. of rooms"
+                      required=""
+                      aria-invalid="false"
+            
+                    />
                   </div>
-                  <input
-                    className="border-2 "
-                    type="number"
-                    value={formData.rooms}
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+               
+                    >
+                      No. of Guests
+                    </label>
+                    <input
+                      className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="guests"
+                      type="number"
+                      name="guests"
+                      value={formData.guests}
                     onChange={handleChange}
-                    name="rooms"
-                    id=""
-                  />
-                  <div className="text-lg  font-semibold text-gray-800 mb-1">
-                    No. of Guests
+                      placeholder="Enter no. of guests"
+                      required=""
+                      aria-invalid="false"
+            
+                    />
                   </div>
-                  <input
-                    className="border-2 "
-                    type="number"
-                    value={formData.guests}
+                                        <div className="mb-4">
+                        <label
+                          className="block text-gray-700 text-sm font-bold mb-2"
+                   
+                        >
+                          Email address
+                        </label>
+                        <input
+                          className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          name="email"
+                          placeholder="Email"
+                          required=""
+                          aria-invalid="false"
+                          
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          className="block text-gray-700 text-sm font-bold mb-2"
+                          // for="nameOnCard"
+                        >
+                          Name on card
+                        </label>
+                        <input
+                          className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          id="nameOnCard"
+                          type="text"
+                          name="nameoncard"
+                          placeholder="Name as it appears on card"
+                          required=""
+                          aria-invalid="false"
+                          value={formData.nameoncard}
                     onChange={handleChange}
-                    name="guests"
-                    id=""
-                  />
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          className="block text-gray-700 text-sm font-bold mb-2"
+                          // for="cardNumber"
+                        >
+                          Card number
+                        </label>
+                        <input
+                          className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          id="cardNumber"
+                          type="text"
+                          name="cardnumber"
+                          placeholder="0000 0000 0000 0000"
+                          required=""
+                          aria-invalid="false"
+                          value={formData.cardnumber}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="flex mb-4 justify-between">
+                        <div className="mb-4">
+                          <label
+                            className="block text-gray-700 text-xs font-bold mb-2"
+                            // for="expiry"
+                          >
+                            Expiration date (MM/YY)
+                          </label>
+                          <input
+                            className="shadow appearance-none border border-gray-300 rounded w-[90%] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="expiry"
+                            type="text"
+                            name="expiry"
+                            placeholder="MM/YY"
+                            required=""
+                            aria-invalid="false"
+                            value={formData.expiry}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label
+                            className="block text-gray-700 text-xs font-bold mb-2"
+                            // for="cvc"
+                          >
+                            CVC
+                          </label>
+                          <input
+                            className="shadow appearance-none border border-gray-300 rounded w-[90%] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="cvc"
+                            type="text"
+                            name="cvc"
+                            placeholder="CVC"
+                            required=""
+                            aria-invalid="false"
+                            value={formData.cvc}
+                    onChange={handleChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          className="block text-gray-700 text-sm font-bold mb-2"
+                          // for="address"
+                        >
+                          Address
+                        </label>
+                        <input
+                          className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          id="address"
+                          type="text"
+                          name="address"
+                          placeholder="Street Address"
+                          required=""
+                          aria-invalid="false"
+                          value={formData.address}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          className="block text-gray-700 text-sm font-bold mb-2"
+                          // for="city"
+                        >
+                          City
+                        </label>
+                        <input
+                          className="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          id="city"
+                          type="text"
+                          name="city"
+                          placeholder="City"
+                          required=""
+                          aria-invalid="false"
+                          value={formData.city}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="flex mb-4 justify-between">
+                        <div className="mb-4">
+                          <label
+                            className="block text-gray-700 text-sm font-bold mb-2"
+                            // for="state"
+                          >
+                            State / Province
+                          </label>
+                          <input
+                            className="shadow appearance-none border border-gray-300 rounded w-[90%] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="state"
+                            type="text"
+                            name="state"
+                            placeholder="State"
+                            required=""
+                            aria-invalid="false"
+                            value={formData.state}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label
+                            className="block text-gray-700 text-sm font-bold mb-2"
+                            // for="postalCode"
+                          >
+                            Postal code
+                          </label>
+                          <input
+                            className="shadow appearance-none border border-gray-300 rounded w-[90%] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="postalCode"
+                            type="text"
+                            name="postalcode"
+                            placeholder="Postal Code"
+                            required=""
+                            aria-invalid="false"
+                            value={formData.postalcode}
+                            onChange={handleChange}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="flex  items-center justify-between">
+                     
+                        <button
+                    onClick={handleSubmit}
+                          className="bg-blue-900 relative hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition duration-300 hover:bg-blue-700"
+                          type="submit"
+                        >
+                         {load && (
+        <div className="w-full absolute h-full flex items-center justify-center top-0 left-0 z-10 text-black bg-white border-2 overflow-hidden "> <img className="w-[40%] ml-[-30px]" src="https://i.pinimg.com/originals/c7/e1/b7/c7e1b7b5753737039e1bdbda578132b8.gif" alt="" /> Transaction in process...</div>
+      )}
+                          Pay ₹ {room.price} INR
+                        </button>
+                      </div>
 
-                  <br />
-                  <br />
-                  <button 
-                  onClick={handleSubmit}
-                  className="w-[90%] bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition duration-300">
-                    Confirm Booking
-                  </button>
+               
+
+                  
                 </form>
               </div>
             </div>
@@ -297,7 +544,7 @@ function Bookhotel() {
             <div>
               <p className="text-lg text-gray-800">{room.facilities}</p>
             </div>
-            <div className="mt-2 space-y-2">
+            <div className="mt-2 space-y-2 w-[55vw]">
               <p className="text-gray-700">{room.description}</p>
             </div>
             <div className="flex justify-between items-center mt-4"></div>

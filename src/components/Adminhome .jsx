@@ -2,19 +2,23 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { allrooms } from "../store/Actions/roomsAction";
 import Footer from './Footer';
+import { asynccurrentAdmin } from '../store/Actions/adminActions';
 
 
 function Userhome() {
   const dispatch = useDispatch();
-  // const data = useSelector((state) => state.internships.data);
-  const { data, loading, error } = useSelector((state) => state.rooms);
+  const {user} = useSelector((state) => state.admin);
+  
 
-  // //(data);
 
   useEffect(() => {
-    dispatch(allrooms());
+    dispatch(asynccurrentAdmin());
   }, [dispatch]);
 
+  if(!user){
+    return <div>Loading...</div>
+  }
+  const data = user.roomscreated;
   console.log(data);
   return (
     <div>
@@ -32,7 +36,7 @@ function Userhome() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation active-link"
-              href="/user"
+              href="/admin"
             >
               Home
             </a>
@@ -43,15 +47,15 @@ function Userhome() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/user/bookings"
+              href="/admin/create"
             >
-              Bookings
+              Create
             </a>
           </li>
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/user/profile"
+              href="/admin/profile"
             >
                 Profile
             </a>
@@ -171,18 +175,18 @@ function Userhome() {
   </div>
 </div>
 
-<h2 className="text-3xl font-medium text-slate-700 text-center my-2">Handpicked nearby hotels for you</h2>
+<h2 className="text-3xl font-medium text-slate-700 text-center my-2">You'r Created Rooms</h2>
 {data && data.map((hotel) => (
 <div key={hotel} className="px-32 py-10 w-full h-fit">
 <div className="card border p-4 flex flex-col md:flex-row gap-x-2 w-full" data-testid="hotel-view-card">
     <div className="cursor-pointer">
-        <a className="block text-slate-700 hover:text-brand transition-colors duration-300" href="/login">
+        <a className="block text-slate-700 hover:text-brand transition-colors duration-300" href="/admin">
             <img src={hotel.image} alt="Varshneys Delhi HOTEL" className="md:w-[220px] md:h-[140px]"></img>
         </a>
     </div>
     <div className="flex flex-col justify-between ml-0 md:ml-2 flex-1">
         <div>
-            <a className="block text-slate-700 hover:text-brand transition-colors duration-300" href="/login">
+            <a className="block text-slate-700 hover:text-brand transition-colors duration-300" href="/admin">
                 <h4 className="text-2xl font-bold text-slate-600">{hotel.name}</h4>
             </a>
             <p className="text-slate-600 text-sm">{hotel.location} | 3.3 kms from city center</p>
@@ -206,7 +210,7 @@ function Userhome() {
             </h4>
             <p className="text-slate-600 font-bold whitespace-nowrap">₹ {hotel.price}</p>
         </div>
-        <a href={`/bookhotel/${hotel._id}`}>
+        <a href="">
         <button className="bg-brand-secondary px-4 py-2 bg-[#CBAE37] text-white whitespace-nowrap">Book now</button>
         </a>
     </div>

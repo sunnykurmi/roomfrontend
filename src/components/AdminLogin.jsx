@@ -8,12 +8,12 @@ import "swiper/css/scrollbar";
 import { RiCloseLine } from "@remixicon/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { asyncsignin } from "../store/Actions/userActions";
+import { asyncsignin } from "../store/Actions/adminActions";
 import Footer from "./Footer";
 
 function Login() {
   const navigate = useNavigate();
-  const { isAuth, error } = useSelector((state) => state.user);
+  const { isAuth, error } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
 
   const [studentFormData, setStudentFormData] = useState({
@@ -33,7 +33,7 @@ function Login() {
 
   useEffect(() => {
     if (isAuth) {
-      navigate("/user");
+      navigate("/admin");
     }
   }, [isAuth, navigate]);
   return (
@@ -76,7 +76,7 @@ function Login() {
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
-              href="/signup"
+              href="/admin/signup"
             >
               Register
             </a>

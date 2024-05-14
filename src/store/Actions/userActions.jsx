@@ -11,10 +11,10 @@ import axios from "../../utils/axios";
 
 export const asynccurrentUser = () => async (dispatch, getState) => {
   try {
-    const { data } = await axios.post("/user");
+    const { data } = await axios.get("/user");
     dispatch(saveUser(data.loggedinuser));
   } catch (error) {
-    //(error.response.data);
+    (error.response.data);
   }
 };
 
@@ -46,14 +46,6 @@ export const asyncremoveUser = () => async (dispatch, getState) => {
   }
 };
 
-export const createRoom = (formData) => async (dispatch) => {
-  try {
-    const response = await axios.post(`/createroom`, formData);
-    dispatch(createroom(response.data.newinternship));
-  } catch (error) {
-    //(error);
-  }
-};
 
 export const bookRoom = (formData) => async (dispatch) => {
   try {

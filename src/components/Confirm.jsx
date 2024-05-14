@@ -1,24 +1,49 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { asynccurrentUser } from "../store/Actions/userActions";
 import Footer from "./Footer";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { allrooms } from "../store/Actions/roomsAction";
+import React, { useEffect, useState } from "react";
+import { asynccurrentUser } from "../store/Actions/userActions";
+import { bookRoom } from "../store/Actions/userActions";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { RiArrowLeftLine } from "@remixicon/react";
 
-function Userprofile() {
-  const dispatch = useDispatch(); // Get dispatch function
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.user);
-  console.log(user);
+function Confirm() {
+    const { data, id } = useParams();
+    const dispatch = useDispatch();
+    const parsedData = JSON.parse(decodeURIComponent(data));
 
-  useEffect(() => {
-    dispatch(asynccurrentUser()); // Fetch employee data when component mounts
-    // dispatch(CreateInternship());
-  }, [dispatch]);
-  
-
+    const currentDate = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        day: 'numeric',
+        month: 'long',
+      });
+   
+      const  roomdata = useSelector((state) => state.rooms);
+      let room = null; // Declare room variable outside of the loop
+    
+      useEffect(() => {
+        dispatch(allrooms());
+      }, [dispatch]);
+    
+      if (!roomdata) {
+        return <h2>Loading...</h2>;
+      }
+    
+      if (roomdata.data) {
+        roomdata.data.forEach((element) => {
+          if (element._id === id) {
+            // Use _id property for comparison
+            room = element;
+          }
+        });
+      }
+    
+    console.log(room);
   return (
     <div>
-      <div className="relative flex bg-[#004AAD] flex-wrap justify-between items-center px-4 md:px-12 global-navbar__container bg-brand brand-divider-bottom shadow-md">
+              <div className="relative flex bg-[#004AAD] flex-wrap justify-between items-center px-4 md:px-12 global-navbar__container bg-brand brand-divider-bottom shadow-md">
         <div className="flex ">
           <a href="/">
             <img
@@ -37,9 +62,7 @@ function Userprofile() {
               Home
             </a>
           </li>
-          <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
-            
-          </li>
+          <li className="p-4 hover:bg-blue-900 md:hover:bg-brand"></li>
           <li className="p-4 hover:bg-blue-900 md:hover:bg-brand">
             <a
               className="uppercase font-medium text-slate-100 hover-underline-animation false"
@@ -141,61 +164,47 @@ function Userprofile() {
           </ul>
         </div>
       </div>
-      <div className="px-32 py-16 w-full">
-        <div className="bg-white shadow sm:rounded-lg flex flex-col">
-          <div className="px-4 py-5 sm:px-6">
-            <h3 className="text-xl leading-6 font-medium text-gray-900">
-              Personal details
-            </h3>
-            <p className="mt-1 max-w-2xl text-gray-500">
-              Keep your details current to ensure seamless communication and
-              services
-            </p>
+      <div className="flex mx-2  px-4 py-52 items-center justify-center flex-col border rounded-md">
+        <div className="flex items-center justify-center mb-2">
+          <img className="w-[30%]" src="https://t3.ftcdn.net/jpg/05/28/57/68/360_F_528576877_j0xSafTg6D4YJutgdmx7B1cGnVflpjxS.jpg" alt="" />
+        </div>
+        <h1 className="text-gray-700 text-2xl font-bold">Booking Confirmed</h1>
+        <p className="text-gray-600 mt-2">
+          Thank you for your booking! Your reservation has been confirmed.
+        </p>
+        <p className="text-gray-600">
+          Please check your email for the booking details and instructions for
+          your stay.
+        </p>
+        <div className="mt-4 flex justify-center flex-wrap items-center">
+          <div className="border-r-2 px-4">
+            <p className="text-gray-600 text-sm">Booking ID</p>
+            <span className="text-gray-600 text-sm font-bold">{parsedData.id}</span>
           </div>
-          <div className="border-t border-gray-200">
-            <dl>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
-                <dt className="font-medium text-gray-500">Firstname</dt>
-                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.firstname}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
-                <dt className="font-medium text-gray-500">Lastname</dt>
-                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.lastname}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
-                <dt className="font-medium text-gray-500">Email address</dt>
-                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.email}
-                  <span className="text-green-500 font-medium"> Verified</span>
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
-                <dt className="font-medium text-gray-500">Phone number</dt>
-                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.contact}
-                  <span className="text-green-500 font-medium"> Verified</span>
-                </dd>
-              </div>
-              
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ">
-                <dt className="font-medium text-gray-500">Nationality</dt>
-                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-2">
-                  India{" "}
-                </dd>
-              </div>
-            </dl>
+          <div className="border-r-2 px-4">
+            <p className="text-gray-600 text-sm">Booking Date</p>
+            <span className="text-gray-600 text-sm font-bold">{currentDate}</span>
           </div>
-          
+          <div className="border-r-2 px-4">
+            <p className="text-gray-600 text-sm">Hotel Name</p>
+            <span className="text-gray-600 text-sm font-bold">{room?.name}</span>
+          </div>
+          <div className="border-r-2 px-4">
+            <p className="text-gray-600 text-sm">Check-in Date</p>
+            <span className="text-gray-600 text-sm font-bold">{parsedData.checkin}</span>
+          </div>
+          <div className="border-r-2 px-4">
+            <p className="text-gray-600 text-sm">Check-out Date</p>
+            <span className="text-gray-600 text-sm font-bold">{parsedData.checkout}</span>
+          </div>
+          <div className="border-r-2 px-4">
+            <p className="text-gray-600 text-sm">Total Fare</p>
+            <span className="text-gray-600 text-sm font-bold">₹{room?.price}</span>
+          </div>
         </div>
       </div>
-<Footer/>
-
     </div>
   );
 }
 
-export default Userprofile;
+export default Confirm;
