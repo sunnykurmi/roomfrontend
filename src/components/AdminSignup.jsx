@@ -30,7 +30,7 @@ function Signup() {
 
   useEffect(() => {
     if (isAuth) {
-      navigate("/user");
+      navigate("/admin");
     }
   }, [isAuth, navigate]);
   useEffect(() => {
